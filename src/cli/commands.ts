@@ -8,7 +8,8 @@ export type CommandName =
   | 'read-json'
   | 'hash-password'
   | 'generate-token'
-  | 'export-users';
+  | 'export-users'
+  | 'import-users';
 
 export interface ParsedCommand {
   name: CommandName;
@@ -25,7 +26,8 @@ export const availableCommands: CommandName[] = [
   'read-json',
   'hash-password',
   'generate-token',
-  'export-users'
+  'export-users',
+  'import-users'
 ];
 
 export function isCommandName(value: string): value is CommandName {
