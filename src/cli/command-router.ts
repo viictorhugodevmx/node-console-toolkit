@@ -7,7 +7,8 @@ import {
   createUser,
   deleteUserByEmail,
   findUserByEmail,
-  readUsers
+  readUsers,
+  updateUserByEmail
 } from '../modules/users/user.repository';
 import { isCommandName, type ParsedCommand } from './commands';
 
@@ -15,34 +16,27 @@ function printHelp(): void {
   console.log('Node Console Toolkit');
   console.log('');
   console.log('Available commands:');
-  console.log('  help                         Show available commands');
-  console.log('  version                      Show CLI version');
-  console.log('  echo <message>               Print a message');
-  console.log('  create-user <name> <email>   Create a user in data/users.json');
-  console.log('  list-users                   List users from data/users.json');
-  console.log('  find-user <email>            Find a user by email');
-  console.log('  delete-user <email>          Delete a user from data/users.json');
-  console.log('  read-json <filePath>         Read and print a JSON file');
-  console.log('  hash-password <password>     Generate a SHA-256 hash');
-  console.log('  generate-token [bytes]       Generate a random token');
-  console.log('  export-users <outputPath>    Export users to a JSON backup file');
-  console.log('  import-users <inputPath>     Import users from a JSON backup file');
-  console.log('  stats-users                  Show users statistics');
+  console.log('  help                                      Show available commands');
+  console.log('  version                                   Show CLI version');
+  console.log('  echo <message>                            Print a message');
+  console.log('  create-user <name> <email>                Create a user in data/users.json');
+  console.log('  list-users                                List users from data/users.json');
+  console.log('  find-user <email>                         Find a user by email');
+  console.log('  update-user <email> <newName> <newEmail>  Update a user');
+  console.log('  delete-user <email>                       Delete a user from data/users.json');
+  console.log('  read-json <filePath>                      Read and print a JSON file');
+  console.log('  hash-password <password>                  Generate a SHA-256 hash');
+  console.log('  generate-token [bytes]                    Generate a random token');
+  console.log('  export-users <outputPath>                 Export users to a JSON backup file');
+  console.log('  import-users <inputPath>                  Import users from a JSON backup file');
+  console.log('  stats-users                               Show users statistics');
   console.log('');
   console.log('Examples:');
   console.log('  npm run dev -- help');
-  console.log('  npm run dev -- version');
-  console.log('  npm run dev -- echo hello world');
   console.log('  npm run dev -- create-user Victor victor@app1.com');
-  console.log('  npm run dev -- list-users');
   console.log('  npm run dev -- find-user victor@app1.com');
-  console.log('  npm run dev -- delete-user victor@app1.com');
-  console.log('  npm run dev -- read-json data/users.json');
-  console.log('  npm run dev -- hash-password 123456');
-  console.log('  npm run dev -- generate-token');
-  console.log('  npm run dev -- generate-token 32');
-  console.log('  npm run dev -- export-users backups/users-backup.json');
-  console.log('  npm run dev -- import-users backups/users-backup.json');
+  console.log('  npm run dev -- update-user victor@app1.com VictorUpdated victor.updated@app1.com');
+  console.log('  npm run dev -- delete-user victor.updated@app1.com');
   console.log('  npm run dev -- stats-users');
 }
 
@@ -94,6 +88,19 @@ function handleFindUser(args: string[]): void {
 
   console.log('User found');
   console.log(JSON.stringify(user, null, 2));
+}
+
+function handleUpdateUser(args: string[]): void {
+  const [currentEmail, newName, newEmail] = args;
+
+  if (!currentEmail || !newName || !newEmail) {
+    throw new Error('Usage: update-user <email> <newName> <newEmail>');
+  }
+
+  const updatedUser = updateUserByEmail(currentEmail, newName, newEmail);
+
+  console.log('User updated successfully');
+  console.log(JSON.stringify(updatedUser, null, 2));
 }
 
 function handleDeleteUser(args: string[]): void {
@@ -227,6 +234,11 @@ export function runCli(rawArgs: string[]): void {
 
     if (command.name === 'find-user') {
       handleFindUser(command.args);
+      return;
+    }
+
+    if (command.name === 'update-user') {
+      handleUpdateUser(command.args);
       return;
     }
 

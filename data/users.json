@@ -40,5 +40,18 @@
     "name": "FindDemo",
     "email": "find@app1.com",
     "createdAt": "2026-07-02T17:55:32.205Z"
+  },
+  {
+    "id": "70a4ebd9-e7bd-453f-8367-347a220b1a7b",
+    "name": "UpdateDemoPro",
+    "email": "update.pro@app1.com",
+    "createdAt": "2026-07-02T18:33:27.756Z",
+    "updatedAt": "2026-07-02T18:33:40.948Z"
+  },
+  {
+    "id": "c60e6abd-f0d0-4bbc-9a04-bd78dcf20b7f",
+    "name": "Duplicado",
+    "email": "duplicado@app1.com",
+    "createdAt": "2026-07-02T18:34:09.636Z"
   }
 ]

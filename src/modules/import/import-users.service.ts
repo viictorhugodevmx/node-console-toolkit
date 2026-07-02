@@ -21,12 +21,16 @@ function isUser(value: unknown): value is User {
 
   const candidate = value as Record<string, unknown>;
 
-  return (
+  const hasRequiredFields =
     typeof candidate.id === 'string' &&
     typeof candidate.name === 'string' &&
     typeof candidate.email === 'string' &&
-    typeof candidate.createdAt === 'string'
-  );
+    typeof candidate.createdAt === 'string';
+
+  const hasValidUpdatedAt =
+    candidate.updatedAt === undefined || typeof candidate.updatedAt === 'string';
+
+  return hasRequiredFields && hasValidUpdatedAt;
 }
 
 function isUsersBackupFile(value: unknown): value is UsersBackupFile {

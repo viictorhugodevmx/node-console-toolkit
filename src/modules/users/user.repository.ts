@@ -21,6 +21,12 @@ function normalizeEmail(email: string): string {
   return email.trim().toLowerCase();
 }
 
+function validateEmail(email: string): void {
+  if (!email.includes('@')) {
+    throw new Error('Invalid email');
+  }
+}
+
 export function readUsers(): User[] {
   ensureUsersFile();
 
@@ -43,9 +49,7 @@ export function findUserByEmail(email: string): User {
   const users = readUsers();
   const normalizedEmail = normalizeEmail(email);
 
-  if (!normalizedEmail.includes('@')) {
-    throw new Error('Invalid email');
-  }
+  validateEmail(normalizedEmail);
 
   const user = users.find((currentUser) => currentUser.email === normalizedEmail);
 
@@ -66,9 +70,7 @@ export function createUser(name: string, email: string): User {
     throw new Error('Name is required');
   }
 
-  if (!normalizedEmail.includes('@')) {
-    throw new Error('Invalid email');
-  }
+  validateEmail(normalizedEmail);
 
   const existingUser = users.find((user) => user.email === normalizedEmail);
 
@@ -89,13 +91,60 @@ export function createUser(name: string, email: string): User {
   return user;
 }
 
+export function updateUserByEmail(
+  currentEmail: string,
+  newName: string,
+  newEmail: string
+): User {
+  const users = readUsers();
+
+  const normalizedCurrentEmail = normalizeEmail(currentEmail);
+  const normalizedNewName = newName.trim();
+  const normalizedNewEmail = normalizeEmail(newEmail);
+
+  validateEmail(normalizedCurrentEmail);
+
+  if (!normalizedNewName) {
+    throw new Error('Name is required');
+  }
+
+  validateEmail(normalizedNewEmail);
+
+  const userIndex = users.findIndex((user) => user.email === normalizedCurrentEmail);
+
+  if (userIndex === -1) {
+    throw new Error('User not found');
+  }
+
+  const duplicatedEmail = users.some((user) => {
+    return user.email === normalizedNewEmail && user.email !== normalizedCurrentEmail;
+  });
+
+  if (duplicatedEmail) {
+    throw new Error('Email already exists');
+  }
+
+  const currentUser = users[userIndex];
+
+  const updatedUser: User = {
+    ...currentUser,
+    name: normalizedNewName,
+    email: normalizedNewEmail,
+    updatedAt: new Date().toISOString()
+  };
+
+  users[userIndex] = updatedUser;
+
+  writeUsers(users);
+
+  return updatedUser;
+}
+
 export function deleteUserByEmail(email: string): User {
   const users = readUsers();
   const normalizedEmail = normalizeEmail(email);
 
-  if (!normalizedEmail.includes('@')) {
-    throw new Error('Invalid email');
-  }
+  validateEmail(normalizedEmail);
 
   const userToDelete = users.find((user) => user.email === normalizedEmail);
 
