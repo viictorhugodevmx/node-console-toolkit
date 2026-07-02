@@ -1,6 +1,5 @@
-function main(): void {
-  console.log('Node Console Toolkit running');
-  console.log('Args:', process.argv.slice(2));
-}
+import { runCli } from './cli/command-router';
 
-main();
+const args = process.argv.slice(2);
+
+runCli(args);
