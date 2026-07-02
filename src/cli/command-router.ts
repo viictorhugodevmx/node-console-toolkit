@@ -1,4 +1,5 @@
 import { generateToken, hashPassword } from '../modules/crypto-tools/hash.service';
+import { exportUsers } from '../modules/export/export-users.service';
 import { readJsonFile } from '../modules/json-files/json-file.service';
 import { createUser, deleteUserByEmail, readUsers } from '../modules/users/user.repository';
 import { isCommandName, type ParsedCommand } from './commands';
@@ -16,6 +17,7 @@ function printHelp(): void {
   console.log('  read-json <filePath>         Read and print a JSON file');
   console.log('  hash-password <password>     Generate a SHA-256 hash');
   console.log('  generate-token [bytes]       Generate a random token');
+  console.log('  export-users <outputPath>    Export users to a JSON backup file');
   console.log('');
   console.log('Examples:');
   console.log('  npm run dev -- help');
@@ -28,6 +30,7 @@ function printHelp(): void {
   console.log('  npm run dev -- hash-password 123456');
   console.log('  npm run dev -- generate-token');
   console.log('  npm run dev -- generate-token 32');
+  console.log('  npm run dev -- export-users backups/users-backup.json');
 }
 
 function printVersion(): void {
@@ -118,6 +121,23 @@ function handleGenerateToken(args: string[]): void {
   }, null, 2));
 }
 
+function handleExportUsers(args: string[]): void {
+  const [outputPath] = args;
+
+  if (!outputPath) {
+    throw new Error('Usage: export-users <outputPath>');
+  }
+
+  const exportData = exportUsers(outputPath);
+
+  console.log('Users exported successfully');
+  console.log(JSON.stringify({
+    outputPath,
+    exportedAt: exportData.exportedAt,
+    total: exportData.total
+  }, null, 2));
+}
+
 function parseCommand(rawArgs: string[]): ParsedCommand {
   const [rawCommand = 'help', ...args] = rawArgs;
 
@@ -177,6 +197,11 @@ export function runCli(rawArgs: string[]): void {
 
     if (command.name === 'generate-token') {
       handleGenerateToken(command.args);
+      return;
+    }
+
+    if (command.name === 'export-users') {
+      handleExportUsers(command.args);
       return;
     }
   } catch (error) {

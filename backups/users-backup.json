@@ -1,0 +1,18 @@
+{
+  "exportedAt": "2026-07-02T17:13:36.929Z",
+  "total": 2,
+  "users": [
+    {
+      "id": "a8d2a734-0a55-44b3-ae9e-8d70ad4dac4c",
+      "name": "Victor",
+      "email": "victor@app1.com",
+      "createdAt": "2026-07-02T14:56:38.494Z"
+    },
+    {
+      "id": "8c141c92-fccc-4390-a7bc-7c9cd1d0ae4c",
+      "name": "BackupDemo",
+      "email": "backup@app1.com",
+      "createdAt": "2026-07-02T17:13:26.594Z"
+    }
+  ]
+}
