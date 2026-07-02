@@ -1,5 +1,6 @@
-import { isCommandName, type ParsedCommand } from './commands';
 import { createUser, readUsers } from '../modules/users/user.repository';
+import { readJsonFile } from '../modules/json-files/json-file.service';
+import { isCommandName, type ParsedCommand } from './commands';
 
 function printHelp(): void {
   console.log('Node Console Toolkit');
@@ -10,6 +11,7 @@ function printHelp(): void {
   console.log('  echo <message>               Print a message');
   console.log('  create-user <name> <email>   Create a user in data/users.json');
   console.log('  list-users                   List users from data/users.json');
+  console.log('  read-json <filePath>         Read and print a JSON file');
   console.log('');
   console.log('Examples:');
   console.log('  npm run dev -- help');
@@ -17,6 +19,7 @@ function printHelp(): void {
   console.log('  npm run dev -- echo hello world');
   console.log('  npm run dev -- create-user Victor victor@app1.com');
   console.log('  npm run dev -- list-users');
+  console.log('  npm run dev -- read-json data/users.json');
 }
 
 function printVersion(): void {
@@ -60,6 +63,18 @@ function handleListUsers(): void {
   console.log(JSON.stringify(users, null, 2));
 }
 
+function handleReadJson(args: string[]): void {
+  const [filePath] = args;
+
+  if (!filePath) {
+    throw new Error('Usage: read-json <filePath>');
+  }
+
+  const data = readJsonFile(filePath);
+
+  console.log(JSON.stringify(data, null, 2));
+}
+
 function parseCommand(rawArgs: string[]): ParsedCommand {
   const [rawCommand = 'help', ...args] = rawArgs;
 
@@ -99,6 +114,11 @@ export function runCli(rawArgs: string[]): void {
 
     if (command.name === 'list-users') {
       handleListUsers();
+      return;
+    }
+
+    if (command.name === 'read-json') {
+      handleReadJson(command.args);
       return;
     }
   } catch (error) {
