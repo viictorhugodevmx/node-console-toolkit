@@ -158,3 +158,12 @@ export function deleteUserByEmail(email: string): User {
 
   return userToDelete;
 }
+
+export function resetUsers(): number {
+  const users = readUsers();
+  const deletedCount = users.length;
+
+  writeUsers([]);
+
+  return deletedCount;
+}

@@ -8,6 +8,7 @@ import {
   deleteUserByEmail,
   findUserByEmail,
   readUsers,
+  resetUsers,
   updateUserByEmail
 } from '../modules/users/user.repository';
 import { isCommandName, type ParsedCommand } from './commands';
@@ -24,6 +25,7 @@ function printHelp(): void {
   console.log('  find-user <email>                         Find a user by email');
   console.log('  update-user <email> <newName> <newEmail>  Update a user');
   console.log('  delete-user <email>                       Delete a user from data/users.json');
+  console.log('  reset-users                               Delete all users from data/users.json');
   console.log('  read-json <filePath>                      Read and print a JSON file');
   console.log('  hash-password <password>                  Generate a SHA-256 hash');
   console.log('  generate-token [bytes]                    Generate a random token');
@@ -37,6 +39,7 @@ function printHelp(): void {
   console.log('  npm run dev -- find-user victor@app1.com');
   console.log('  npm run dev -- update-user victor@app1.com VictorUpdated victor.updated@app1.com');
   console.log('  npm run dev -- delete-user victor.updated@app1.com');
+  console.log('  npm run dev -- reset-users');
   console.log('  npm run dev -- stats-users');
 }
 
@@ -114,6 +117,15 @@ function handleDeleteUser(args: string[]): void {
 
   console.log('User deleted successfully');
   console.log(JSON.stringify(deletedUser, null, 2));
+}
+
+function handleResetUsers(): void {
+  const deletedCount = resetUsers();
+
+  console.log('Users reset successfully');
+  console.log(JSON.stringify({
+    deletedCount
+  }, null, 2));
 }
 
 function handleReadJson(args: string[]): void {
@@ -244,6 +256,11 @@ export function runCli(rawArgs: string[]): void {
 
     if (command.name === 'delete-user') {
       handleDeleteUser(command.args);
+      return;
+    }
+
+    if (command.name === 'reset-users') {
+      handleResetUsers();
       return;
     }
 

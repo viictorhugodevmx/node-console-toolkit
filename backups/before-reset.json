@@ -1,0 +1,61 @@
+{
+  "exportedAt": "2026-07-02T20:48:55.137Z",
+  "total": 9,
+  "users": [
+    {
+      "id": "a8d2a734-0a55-44b3-ae9e-8d70ad4dac4c",
+      "name": "Victor",
+      "email": "victor@app1.com",
+      "createdAt": "2026-07-02T14:56:38.494Z"
+    },
+    {
+      "id": "8c141c92-fccc-4390-a7bc-7c9cd1d0ae4c",
+      "name": "BackupDemo",
+      "email": "backup@app1.com",
+      "createdAt": "2026-07-02T17:13:26.594Z"
+    },
+    {
+      "id": "41a71512-acd9-4ba3-b967-c6d59ff8e6ef",
+      "name": "RestoreDemo",
+      "email": "restore@app1.com",
+      "createdAt": "2026-07-02T17:29:24.781Z"
+    },
+    {
+      "id": "2e1875e4-3e91-4a22-a512-9436268c2ae6",
+      "name": "GmailUser",
+      "email": "gmail@app1.com",
+      "createdAt": "2026-07-02T17:38:36.989Z"
+    },
+    {
+      "id": "2b0df21a-942f-4d2a-981a-9c5c3d99abc4",
+      "name": "OtherGmail",
+      "email": "otro@gmail.com",
+      "createdAt": "2026-07-02T17:38:39.644Z"
+    },
+    {
+      "id": "cf67466c-ef78-4e72-9e09-402e4191e322",
+      "name": "OutlookUser",
+      "email": "outlook@outlook.com",
+      "createdAt": "2026-07-02T17:38:43.060Z"
+    },
+    {
+      "id": "04d1cbcf-7b40-4113-abf8-166685b8f084",
+      "name": "FindDemo",
+      "email": "find@app1.com",
+      "createdAt": "2026-07-02T17:55:32.205Z"
+    },
+    {
+      "id": "70a4ebd9-e7bd-453f-8367-347a220b1a7b",
+      "name": "UpdateDemoPro",
+      "email": "update.pro@app1.com",
+      "createdAt": "2026-07-02T18:33:27.756Z",
+      "updatedAt": "2026-07-02T18:33:40.948Z"
+    },
+    {
+      "id": "c60e6abd-f0d0-4bbc-9a04-bd78dcf20b7f",
+      "name": "Duplicado",
+      "email": "duplicado@app1.com",
+      "createdAt": "2026-07-02T18:34:09.636Z"
+    }
+  ]
+}
