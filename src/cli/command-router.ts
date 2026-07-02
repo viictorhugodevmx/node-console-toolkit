@@ -1,6 +1,6 @@
 import { generateToken, hashPassword } from '../modules/crypto-tools/hash.service';
 import { readJsonFile } from '../modules/json-files/json-file.service';
-import { createUser, readUsers } from '../modules/users/user.repository';
+import { createUser, deleteUserByEmail, readUsers } from '../modules/users/user.repository';
 import { isCommandName, type ParsedCommand } from './commands';
 
 function printHelp(): void {
@@ -12,6 +12,7 @@ function printHelp(): void {
   console.log('  echo <message>               Print a message');
   console.log('  create-user <name> <email>   Create a user in data/users.json');
   console.log('  list-users                   List users from data/users.json');
+  console.log('  delete-user <email>          Delete a user from data/users.json');
   console.log('  read-json <filePath>         Read and print a JSON file');
   console.log('  hash-password <password>     Generate a SHA-256 hash');
   console.log('  generate-token [bytes]       Generate a random token');
@@ -22,6 +23,7 @@ function printHelp(): void {
   console.log('  npm run dev -- echo hello world');
   console.log('  npm run dev -- create-user Victor victor@app1.com');
   console.log('  npm run dev -- list-users');
+  console.log('  npm run dev -- delete-user victor@app1.com');
   console.log('  npm run dev -- read-json data/users.json');
   console.log('  npm run dev -- hash-password 123456');
   console.log('  npm run dev -- generate-token');
@@ -48,10 +50,6 @@ function handleCreateUser(args: string[]): void {
     throw new Error('Usage: create-user <name> <email>');
   }
 
-  if (!email.includes('@')) {
-    throw new Error('Invalid email');
-  }
-
   const user = createUser(name, email);
 
   console.log('User created successfully');
@@ -67,6 +65,19 @@ function handleListUsers(): void {
   }
 
   console.log(JSON.stringify(users, null, 2));
+}
+
+function handleDeleteUser(args: string[]): void {
+  const [email] = args;
+
+  if (!email) {
+    throw new Error('Usage: delete-user <email>');
+  }
+
+  const deletedUser = deleteUserByEmail(email);
+
+  console.log('User deleted successfully');
+  console.log(JSON.stringify(deletedUser, null, 2));
 }
 
 function handleReadJson(args: string[]): void {
@@ -146,6 +157,11 @@ export function runCli(rawArgs: string[]): void {
 
     if (command.name === 'list-users') {
       handleListUsers();
+      return;
+    }
+
+    if (command.name === 'delete-user') {
+      handleDeleteUser(command.args);
       return;
     }
 

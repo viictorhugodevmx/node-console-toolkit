@@ -38,7 +38,16 @@ export function writeUsers(users: User[]): void {
 export function createUser(name: string, email: string): User {
   const users = readUsers();
 
+  const normalizedName = name.trim();
   const normalizedEmail = email.trim().toLowerCase();
+
+  if (!normalizedName) {
+    throw new Error('Name is required');
+  }
+
+  if (!normalizedEmail.includes('@')) {
+    throw new Error('Invalid email');
+  }
 
   const existingUser = users.find((user) => user.email === normalizedEmail);
 
@@ -48,7 +57,7 @@ export function createUser(name: string, email: string): User {
 
   const user: User = {
     id: crypto.randomUUID(),
-    name: name.trim(),
+    name: normalizedName,
     email: normalizedEmail,
     createdAt: new Date().toISOString()
   };
@@ -57,4 +66,25 @@ export function createUser(name: string, email: string): User {
   writeUsers(users);
 
   return user;
+}
+
+export function deleteUserByEmail(email: string): User {
+  const users = readUsers();
+  const normalizedEmail = email.trim().toLowerCase();
+
+  if (!normalizedEmail.includes('@')) {
+    throw new Error('Invalid email');
+  }
+
+  const userToDelete = users.find((user) => user.email === normalizedEmail);
+
+  if (!userToDelete) {
+    throw new Error('User not found');
+  }
+
+  const remainingUsers = users.filter((user) => user.email !== normalizedEmail);
+
+  writeUsers(remainingUsers);
+
+  return userToDelete;
 }
