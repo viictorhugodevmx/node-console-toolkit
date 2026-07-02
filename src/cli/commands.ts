@@ -4,6 +4,7 @@ export type CommandName =
   | 'echo'
   | 'create-user'
   | 'list-users'
+  | 'find-user'
   | 'delete-user'
   | 'read-json'
   | 'hash-password'
@@ -23,6 +24,7 @@ export const availableCommands: CommandName[] = [
   'echo',
   'create-user',
   'list-users',
+  'find-user',
   'delete-user',
   'read-json',
   'hash-password',

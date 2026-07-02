@@ -3,7 +3,12 @@ import { exportUsers } from '../modules/export/export-users.service';
 import { importUsers } from '../modules/import/import-users.service';
 import { readJsonFile } from '../modules/json-files/json-file.service';
 import { getUserStats } from '../modules/stats/user-stats.service';
-import { createUser, deleteUserByEmail, readUsers } from '../modules/users/user.repository';
+import {
+  createUser,
+  deleteUserByEmail,
+  findUserByEmail,
+  readUsers
+} from '../modules/users/user.repository';
 import { isCommandName, type ParsedCommand } from './commands';
 
 function printHelp(): void {
@@ -15,6 +20,7 @@ function printHelp(): void {
   console.log('  echo <message>               Print a message');
   console.log('  create-user <name> <email>   Create a user in data/users.json');
   console.log('  list-users                   List users from data/users.json');
+  console.log('  find-user <email>            Find a user by email');
   console.log('  delete-user <email>          Delete a user from data/users.json');
   console.log('  read-json <filePath>         Read and print a JSON file');
   console.log('  hash-password <password>     Generate a SHA-256 hash');
@@ -29,6 +35,7 @@ function printHelp(): void {
   console.log('  npm run dev -- echo hello world');
   console.log('  npm run dev -- create-user Victor victor@app1.com');
   console.log('  npm run dev -- list-users');
+  console.log('  npm run dev -- find-user victor@app1.com');
   console.log('  npm run dev -- delete-user victor@app1.com');
   console.log('  npm run dev -- read-json data/users.json');
   console.log('  npm run dev -- hash-password 123456');
@@ -74,6 +81,19 @@ function handleListUsers(): void {
   }
 
   console.log(JSON.stringify(users, null, 2));
+}
+
+function handleFindUser(args: string[]): void {
+  const [email] = args;
+
+  if (!email) {
+    throw new Error('Usage: find-user <email>');
+  }
+
+  const user = findUserByEmail(email);
+
+  console.log('User found');
+  console.log(JSON.stringify(user, null, 2));
 }
 
 function handleDeleteUser(args: string[]): void {
@@ -202,6 +222,11 @@ export function runCli(rawArgs: string[]): void {
 
     if (command.name === 'list-users') {
       handleListUsers();
+      return;
+    }
+
+    if (command.name === 'find-user') {
+      handleFindUser(command.args);
       return;
     }
 

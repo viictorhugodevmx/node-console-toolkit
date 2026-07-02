@@ -17,6 +17,10 @@ function ensureUsersFile(): void {
   }
 }
 
+function normalizeEmail(email: string): string {
+  return email.trim().toLowerCase();
+}
+
 export function readUsers(): User[] {
   ensureUsersFile();
 
@@ -35,11 +39,28 @@ export function writeUsers(users: User[]): void {
   fs.writeFileSync(usersFilePath, JSON.stringify(users, null, 2), 'utf-8');
 }
 
+export function findUserByEmail(email: string): User {
+  const users = readUsers();
+  const normalizedEmail = normalizeEmail(email);
+
+  if (!normalizedEmail.includes('@')) {
+    throw new Error('Invalid email');
+  }
+
+  const user = users.find((currentUser) => currentUser.email === normalizedEmail);
+
+  if (!user) {
+    throw new Error('User not found');
+  }
+
+  return user;
+}
+
 export function createUser(name: string, email: string): User {
   const users = readUsers();
 
   const normalizedName = name.trim();
-  const normalizedEmail = email.trim().toLowerCase();
+  const normalizedEmail = normalizeEmail(email);
 
   if (!normalizedName) {
     throw new Error('Name is required');
@@ -70,7 +91,7 @@ export function createUser(name: string, email: string): User {
 
 export function deleteUserByEmail(email: string): User {
   const users = readUsers();
-  const normalizedEmail = email.trim().toLowerCase();
+  const normalizedEmail = normalizeEmail(email);
 
   if (!normalizedEmail.includes('@')) {
     throw new Error('Invalid email');
