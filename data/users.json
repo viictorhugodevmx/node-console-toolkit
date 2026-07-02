@@ -16,5 +16,23 @@
     "name": "RestoreDemo",
     "email": "restore@app1.com",
     "createdAt": "2026-07-02T17:29:24.781Z"
+  },
+  {
+    "id": "2e1875e4-3e91-4a22-a512-9436268c2ae6",
+    "name": "GmailUser",
+    "email": "gmail@app1.com",
+    "createdAt": "2026-07-02T17:38:36.989Z"
+  },
+  {
+    "id": "2b0df21a-942f-4d2a-981a-9c5c3d99abc4",
+    "name": "OtherGmail",
+    "email": "otro@gmail.com",
+    "createdAt": "2026-07-02T17:38:39.644Z"
+  },
+  {
+    "id": "cf67466c-ef78-4e72-9e09-402e4191e322",
+    "name": "OutlookUser",
+    "email": "outlook@outlook.com",
+    "createdAt": "2026-07-02T17:38:43.060Z"
   }
 ]

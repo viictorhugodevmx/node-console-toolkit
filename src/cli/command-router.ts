@@ -2,6 +2,7 @@ import { generateToken, hashPassword } from '../modules/crypto-tools/hash.servic
 import { exportUsers } from '../modules/export/export-users.service';
 import { importUsers } from '../modules/import/import-users.service';
 import { readJsonFile } from '../modules/json-files/json-file.service';
+import { getUserStats } from '../modules/stats/user-stats.service';
 import { createUser, deleteUserByEmail, readUsers } from '../modules/users/user.repository';
 import { isCommandName, type ParsedCommand } from './commands';
 
@@ -20,6 +21,7 @@ function printHelp(): void {
   console.log('  generate-token [bytes]       Generate a random token');
   console.log('  export-users <outputPath>    Export users to a JSON backup file');
   console.log('  import-users <inputPath>     Import users from a JSON backup file');
+  console.log('  stats-users                  Show users statistics');
   console.log('');
   console.log('Examples:');
   console.log('  npm run dev -- help');
@@ -34,6 +36,7 @@ function printHelp(): void {
   console.log('  npm run dev -- generate-token 32');
   console.log('  npm run dev -- export-users backups/users-backup.json');
   console.log('  npm run dev -- import-users backups/users-backup.json');
+  console.log('  npm run dev -- stats-users');
 }
 
 function printVersion(): void {
@@ -154,6 +157,12 @@ function handleImportUsers(args: string[]): void {
   console.log(JSON.stringify(result, null, 2));
 }
 
+function handleStatsUsers(): void {
+  const stats = getUserStats();
+
+  console.log(JSON.stringify(stats, null, 2));
+}
+
 function parseCommand(rawArgs: string[]): ParsedCommand {
   const [rawCommand = 'help', ...args] = rawArgs;
 
@@ -223,6 +232,11 @@ export function runCli(rawArgs: string[]): void {
 
     if (command.name === 'import-users') {
       handleImportUsers(command.args);
+      return;
+    }
+
+    if (command.name === 'stats-users') {
+      handleStatsUsers();
       return;
     }
   } catch (error) {
