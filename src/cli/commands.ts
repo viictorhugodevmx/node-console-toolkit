@@ -1,11 +1,22 @@
-export type CommandName = 'help' | 'version' | 'echo';
+export type CommandName =
+  | 'help'
+  | 'version'
+  | 'echo'
+  | 'create-user'
+  | 'list-users';
 
 export interface ParsedCommand {
   name: CommandName;
   args: string[];
 }
 
-export const availableCommands: CommandName[] = ['help', 'version', 'echo'];
+export const availableCommands: CommandName[] = [
+  'help',
+  'version',
+  'echo',
+  'create-user',
+  'list-users'
+];
 
 export function isCommandName(value: string): value is CommandName {
   return availableCommands.includes(value as CommandName);
