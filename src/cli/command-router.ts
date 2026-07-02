@@ -1,4 +1,4 @@
-import { hashPassword } from '../modules/crypto-tools/hash.service';
+import { generateToken, hashPassword } from '../modules/crypto-tools/hash.service';
 import { readJsonFile } from '../modules/json-files/json-file.service';
 import { createUser, readUsers } from '../modules/users/user.repository';
 import { isCommandName, type ParsedCommand } from './commands';
@@ -14,6 +14,7 @@ function printHelp(): void {
   console.log('  list-users                   List users from data/users.json');
   console.log('  read-json <filePath>         Read and print a JSON file');
   console.log('  hash-password <password>     Generate a SHA-256 hash');
+  console.log('  generate-token [bytes]       Generate a random token');
   console.log('');
   console.log('Examples:');
   console.log('  npm run dev -- help');
@@ -23,6 +24,8 @@ function printHelp(): void {
   console.log('  npm run dev -- list-users');
   console.log('  npm run dev -- read-json data/users.json');
   console.log('  npm run dev -- hash-password 123456');
+  console.log('  npm run dev -- generate-token');
+  console.log('  npm run dev -- generate-token 32');
 }
 
 function printVersion(): void {
@@ -93,6 +96,17 @@ function handleHashPassword(args: string[]): void {
   }, null, 2));
 }
 
+function handleGenerateToken(args: string[]): void {
+  const [rawBytes] = args;
+  const bytes = rawBytes ? Number(rawBytes) : 24;
+  const token = generateToken(bytes);
+
+  console.log(JSON.stringify({
+    bytes,
+    token
+  }, null, 2));
+}
+
 function parseCommand(rawArgs: string[]): ParsedCommand {
   const [rawCommand = 'help', ...args] = rawArgs;
 
@@ -142,6 +156,11 @@ export function runCli(rawArgs: string[]): void {
 
     if (command.name === 'hash-password') {
       handleHashPassword(command.args);
+      return;
+    }
+
+    if (command.name === 'generate-token') {
+      handleGenerateToken(command.args);
       return;
     }
   } catch (error) {
