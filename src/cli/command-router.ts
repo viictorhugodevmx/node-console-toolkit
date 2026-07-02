@@ -1,5 +1,6 @@
-import { createUser, readUsers } from '../modules/users/user.repository';
+import { hashPassword } from '../modules/crypto-tools/hash.service';
 import { readJsonFile } from '../modules/json-files/json-file.service';
+import { createUser, readUsers } from '../modules/users/user.repository';
 import { isCommandName, type ParsedCommand } from './commands';
 
 function printHelp(): void {
@@ -12,6 +13,7 @@ function printHelp(): void {
   console.log('  create-user <name> <email>   Create a user in data/users.json');
   console.log('  list-users                   List users from data/users.json');
   console.log('  read-json <filePath>         Read and print a JSON file');
+  console.log('  hash-password <password>     Generate a SHA-256 hash');
   console.log('');
   console.log('Examples:');
   console.log('  npm run dev -- help');
@@ -20,6 +22,7 @@ function printHelp(): void {
   console.log('  npm run dev -- create-user Victor victor@app1.com');
   console.log('  npm run dev -- list-users');
   console.log('  npm run dev -- read-json data/users.json');
+  console.log('  npm run dev -- hash-password 123456');
 }
 
 function printVersion(): void {
@@ -75,6 +78,21 @@ function handleReadJson(args: string[]): void {
   console.log(JSON.stringify(data, null, 2));
 }
 
+function handleHashPassword(args: string[]): void {
+  const [password] = args;
+
+  if (!password) {
+    throw new Error('Usage: hash-password <password>');
+  }
+
+  const hash = hashPassword(password);
+
+  console.log(JSON.stringify({
+    algorithm: 'sha256',
+    hash
+  }, null, 2));
+}
+
 function parseCommand(rawArgs: string[]): ParsedCommand {
   const [rawCommand = 'help', ...args] = rawArgs;
 
@@ -119,6 +137,11 @@ export function runCli(rawArgs: string[]): void {
 
     if (command.name === 'read-json') {
       handleReadJson(command.args);
+      return;
+    }
+
+    if (command.name === 'hash-password') {
+      handleHashPassword(command.args);
       return;
     }
   } catch (error) {
