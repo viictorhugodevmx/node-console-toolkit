@@ -11,6 +11,7 @@ import {
   resetUsers,
   updateUserByEmail
 } from '../modules/users/user.repository';
+import type { User } from '../modules/users/user.types';
 import { isCommandName, type ParsedCommand } from './commands';
 
 function printHelp(): void {
@@ -36,6 +37,7 @@ function printHelp(): void {
   console.log('Examples:');
   console.log('  npm run dev -- help');
   console.log('  npm run dev -- create-user Victor victor@app1.com');
+  console.log('  npm run dev -- list-users');
   console.log('  npm run dev -- find-user victor@app1.com');
   console.log('  npm run dev -- update-user victor@app1.com VictorUpdated victor.updated@app1.com');
   console.log('  npm run dev -- delete-user victor.updated@app1.com');
@@ -54,6 +56,18 @@ function printEcho(args: string[]): void {
   }
 
   console.log(args.join(' '));
+}
+
+function printUserTable(users: User[]): void {
+  const tableRows = users.map((user) => ({
+    id: user.id.slice(0, 8),
+    name: user.name,
+    email: user.email,
+    createdAt: user.createdAt,
+    updatedAt: user.updatedAt ?? '-'
+  }));
+
+  console.table(tableRows);
 }
 
 function handleCreateUser(args: string[]): void {
@@ -77,7 +91,7 @@ function handleListUsers(): void {
     return;
   }
 
-  console.log(JSON.stringify(users, null, 2));
+  printUserTable(users);
 }
 
 function handleFindUser(args: string[]): void {
