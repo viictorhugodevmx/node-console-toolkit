@@ -1,6 +1,6 @@
 {
-  "exportedAt": "2026-07-03T04:05:12.494Z",
-  "total": 18,
+  "exportedAt": "2026-07-03T04:05:13.800Z",
+  "total": 19,
   "users": [
     {
       "id": "a8d2a734-0a55-44b3-ae9e-8d70ad4dac4c",
@@ -110,6 +110,12 @@
       "name": "DomainOutlook",
       "email": "domain.outlook@outlook.com",
       "createdAt": "2026-07-03T03:10:31.170Z"
+    },
+    {
+      "id": "ee692568-63b8-408d-8629-4b0491f4315c",
+      "name": "SmokeTest",
+      "email": "smoke@app1.com",
+      "createdAt": "2026-07-03T04:05:12.879Z"
     }
   ]
 }
