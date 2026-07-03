@@ -4,6 +4,7 @@ import { importUsers } from '../modules/import/import-users.service';
 import { readJsonFile } from '../modules/json-files/json-file.service';
 import { getUserStats } from '../modules/stats/user-stats.service';
 import {
+  countUsers,
   createUser,
   deleteUserByEmail,
   filterUsersByDomain,
@@ -26,6 +27,7 @@ function printHelp(): void {
   console.log('  echo <message>                            Print a message');
   console.log('  create-user <name> <email>                Create a user in data/users.json');
   console.log('  list-users                                List users from data/users.json');
+  console.log('  count-users                               Count users from data/users.json');
   console.log('  find-user <email>                         Find a user by email');
   console.log('  search-users <query>                      Search users by name or email');
   console.log('  filter-users <domain>                     Filter users by email domain');
@@ -41,8 +43,8 @@ function printHelp(): void {
   console.log('  stats-users                               Show users statistics');
   console.log('');
   console.log('Examples:');
+  console.log('  npm run dev -- count-users');
   console.log('  npm run dev -- list-users');
-  console.log('  npm run dev -- search-users victor');
   console.log('  npm run dev -- filter-users app1.com');
   console.log('  npm run dev -- sort-users name asc');
 }
@@ -94,6 +96,12 @@ function handleListUsers(): void {
   }
 
   printUserTable(users);
+}
+
+function handleCountUsers(): void {
+  const result = countUsers();
+
+  console.log(JSON.stringify(result, null, 2));
 }
 
 function handleFindUser(args: string[]): void {
@@ -311,6 +319,11 @@ export function runCli(rawArgs: string[]): void {
 
     if (command.name === 'list-users') {
       handleListUsers();
+      return;
+    }
+
+    if (command.name === 'count-users') {
+      handleCountUsers();
       return;
     }
 

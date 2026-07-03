@@ -62,6 +62,15 @@ export function writeUsers(users: User[]): void {
   fs.writeFileSync(usersFilePath, JSON.stringify(users, null, 2), 'utf-8');
 }
 
+export function countUsers(): { totalUsers: number; hasUsers: boolean } {
+  const users = readUsers();
+
+  return {
+    totalUsers: users.length,
+    hasUsers: users.length > 0
+  };
+}
+
 export function findUserByEmail(email: string): User {
   const users = readUsers();
   const normalizedEmail = normalizeEmail(email);
