@@ -14,6 +14,7 @@ export type CommandName =
   | 'reset-users'
   | 'validate-users'
   | 'repair-users'
+  | 'backup-users'
   | 'read-json'
   | 'hash-password'
   | 'generate-token'
@@ -42,6 +43,7 @@ export const availableCommands: CommandName[] = [
   'reset-users',
   'validate-users',
   'repair-users',
+  'backup-users',
   'read-json',
   'hash-password',
   'generate-token',

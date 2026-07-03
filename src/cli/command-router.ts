@@ -1,3 +1,4 @@
+import { backupUsers } from '../modules/backup/backup-users.service';
 import { generateToken, hashPassword } from '../modules/crypto-tools/hash.service';
 import { exportUsers } from '../modules/export/export-users.service';
 import { importUsers } from '../modules/import/import-users.service';
@@ -39,6 +40,7 @@ function printHelp(): void {
   console.log('  reset-users                               Delete all users from data/users.json');
   console.log('  validate-users                            Validate users data integrity');
   console.log('  repair-users                              Repair users data when possible');
+  console.log('  backup-users                              Create automatic users backup');
   console.log('  read-json <filePath>                      Read and print a JSON file');
   console.log('  hash-password <password>                  Generate a SHA-256 hash');
   console.log('  generate-token [bytes]                    Generate a random token');
@@ -47,10 +49,10 @@ function printHelp(): void {
   console.log('  stats-users                               Show users statistics');
   console.log('');
   console.log('Examples:');
+  console.log('  npm run dev -- backup-users');
   console.log('  npm run dev -- validate-users');
   console.log('  npm run dev -- repair-users');
   console.log('  npm run dev -- count-users');
-  console.log('  npm run dev -- list-users');
 }
 
 function printVersion(): void {
@@ -236,6 +238,13 @@ function handleRepairUsers(): void {
   console.log(JSON.stringify(result, null, 2));
 }
 
+function handleBackupUsers(): void {
+  const result = backupUsers();
+
+  console.log('Users backup created successfully');
+  console.log(JSON.stringify(result, null, 2));
+}
+
 function handleReadJson(args: string[]): void {
   const [filePath] = args;
 
@@ -399,6 +408,11 @@ export function runCli(rawArgs: string[]): void {
 
     if (command.name === 'repair-users') {
       handleRepairUsers();
+      return;
+    }
+
+    if (command.name === 'backup-users') {
+      handleBackupUsers();
       return;
     }
 
