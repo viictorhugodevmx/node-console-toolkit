@@ -89,5 +89,23 @@
     "name": "Carlos",
     "email": "carlos@app1.com",
     "createdAt": "2026-07-03T03:05:18.113Z"
+  },
+  {
+    "id": "69df269b-c7a3-4b59-9c04-5174d4783696",
+    "name": "DomainApp",
+    "email": "domain.app@app1.com",
+    "createdAt": "2026-07-03T03:10:28.480Z"
+  },
+  {
+    "id": "74eaf5f2-6c5d-4b4f-8340-61c9b5ba8de5",
+    "name": "DomainGmail",
+    "email": "domain.gmail@gmail.com",
+    "createdAt": "2026-07-03T03:10:29.970Z"
+  },
+  {
+    "id": "96c06c85-a999-44de-8208-043b2afff1cf",
+    "name": "DomainOutlook",
+    "email": "domain.outlook@outlook.com",
+    "createdAt": "2026-07-03T03:10:31.170Z"
   }
 ]

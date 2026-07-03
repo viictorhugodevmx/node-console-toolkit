@@ -6,6 +6,7 @@ import { getUserStats } from '../modules/stats/user-stats.service';
 import {
   createUser,
   deleteUserByEmail,
+  filterUsersByDomain,
   findUserByEmail,
   readUsers,
   resetUsers,
@@ -27,6 +28,7 @@ function printHelp(): void {
   console.log('  list-users                                List users from data/users.json');
   console.log('  find-user <email>                         Find a user by email');
   console.log('  search-users <query>                      Search users by name or email');
+  console.log('  filter-users <domain>                     Filter users by email domain');
   console.log('  sort-users <field> <direction>            Sort users by field');
   console.log('  update-user <email> <newName> <newEmail>  Update a user');
   console.log('  delete-user <email>                       Delete a user from data/users.json');
@@ -41,9 +43,8 @@ function printHelp(): void {
   console.log('Examples:');
   console.log('  npm run dev -- list-users');
   console.log('  npm run dev -- search-users victor');
+  console.log('  npm run dev -- filter-users app1.com');
   console.log('  npm run dev -- sort-users name asc');
-  console.log('  npm run dev -- sort-users email desc');
-  console.log('  npm run dev -- sort-users createdAt asc');
 }
 
 function printVersion(): void {
@@ -123,6 +124,24 @@ function handleSearchUsers(args: string[]): void {
   }
 
   console.log(`Found ${users.length} user(s)`);
+  printUserTable(users);
+}
+
+function handleFilterUsers(args: string[]): void {
+  const [domain] = args;
+
+  if (!domain) {
+    throw new Error('Usage: filter-users <domain>');
+  }
+
+  const users = filterUsersByDomain(domain);
+
+  if (users.length === 0) {
+    console.log('No users matched that domain');
+    return;
+  }
+
+  console.log(`Found ${users.length} user(s) for domain ${domain}`);
   printUserTable(users);
 }
 
@@ -302,6 +321,11 @@ export function runCli(rawArgs: string[]): void {
 
     if (command.name === 'search-users') {
       handleSearchUsers(command.args);
+      return;
+    }
+
+    if (command.name === 'filter-users') {
+      handleFilterUsers(command.args);
       return;
     }
 

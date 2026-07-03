@@ -30,6 +30,12 @@ function validateEmail(email: string): void {
   }
 }
 
+function getEmailDomain(email: string): string {
+  const [, domain = ''] = email.split('@');
+
+  return domain.trim().toLowerCase();
+}
+
 function isUserSortField(value: string): value is UserSortField {
   return ['name', 'email', 'createdAt', 'updatedAt'].includes(value);
 }
@@ -84,6 +90,23 @@ export function searchUsers(query: string): User[] {
       user.name.toLowerCase().includes(normalizedQuery) ||
       user.email.toLowerCase().includes(normalizedQuery)
     );
+  });
+}
+
+export function filterUsersByDomain(domain: string): User[] {
+  const users = readUsers();
+  const normalizedDomain = domain.trim().toLowerCase();
+
+  if (!normalizedDomain) {
+    throw new Error('Domain is required');
+  }
+
+  if (normalizedDomain.includes('@')) {
+    throw new Error('Use only the domain. Example: app1.com');
+  }
+
+  return users.filter((user) => {
+    return getEmailDomain(user.email) === normalizedDomain;
   });
 }
 
