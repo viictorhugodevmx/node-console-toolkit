@@ -9,6 +9,7 @@ import {
   findUserByEmail,
   readUsers,
   resetUsers,
+  searchUsers,
   updateUserByEmail
 } from '../modules/users/user.repository';
 import type { User } from '../modules/users/user.types';
@@ -24,6 +25,7 @@ function printHelp(): void {
   console.log('  create-user <name> <email>                Create a user in data/users.json');
   console.log('  list-users                                List users from data/users.json');
   console.log('  find-user <email>                         Find a user by email');
+  console.log('  search-users <query>                      Search users by name or email');
   console.log('  update-user <email> <newName> <newEmail>  Update a user');
   console.log('  delete-user <email>                       Delete a user from data/users.json');
   console.log('  reset-users                               Delete all users from data/users.json');
@@ -35,13 +37,12 @@ function printHelp(): void {
   console.log('  stats-users                               Show users statistics');
   console.log('');
   console.log('Examples:');
-  console.log('  npm run dev -- help');
   console.log('  npm run dev -- create-user Victor victor@app1.com');
   console.log('  npm run dev -- list-users');
   console.log('  npm run dev -- find-user victor@app1.com');
+  console.log('  npm run dev -- search-users victor');
   console.log('  npm run dev -- update-user victor@app1.com VictorUpdated victor.updated@app1.com');
   console.log('  npm run dev -- delete-user victor.updated@app1.com');
-  console.log('  npm run dev -- reset-users');
   console.log('  npm run dev -- stats-users');
 }
 
@@ -105,6 +106,24 @@ function handleFindUser(args: string[]): void {
 
   console.log('User found');
   console.log(JSON.stringify(user, null, 2));
+}
+
+function handleSearchUsers(args: string[]): void {
+  const [query] = args;
+
+  if (!query) {
+    throw new Error('Usage: search-users <query>');
+  }
+
+  const users = searchUsers(query);
+
+  if (users.length === 0) {
+    console.log('No users matched your search');
+    return;
+  }
+
+  console.log(`Found ${users.length} user(s)`);
+  printUserTable(users);
 }
 
 function handleUpdateUser(args: string[]): void {
@@ -260,6 +279,11 @@ export function runCli(rawArgs: string[]): void {
 
     if (command.name === 'find-user') {
       handleFindUser(command.args);
+      return;
+    }
+
+    if (command.name === 'search-users') {
+      handleSearchUsers(command.args);
       return;
     }
 

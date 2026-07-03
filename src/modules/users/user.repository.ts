@@ -60,6 +60,22 @@ export function findUserByEmail(email: string): User {
   return user;
 }
 
+export function searchUsers(query: string): User[] {
+  const users = readUsers();
+  const normalizedQuery = query.trim().toLowerCase();
+
+  if (!normalizedQuery) {
+    throw new Error('Search query is required');
+  }
+
+  return users.filter((user) => {
+    return (
+      user.name.toLowerCase().includes(normalizedQuery) ||
+      user.email.toLowerCase().includes(normalizedQuery)
+    );
+  });
+}
+
 export function createUser(name: string, email: string): User {
   const users = readUsers();
 

@@ -53,5 +53,23 @@
     "name": "Duplicado",
     "email": "duplicado@app1.com",
     "createdAt": "2026-07-02T18:34:09.636Z"
+  },
+  {
+    "id": "641629dd-6c12-401d-8e1b-646e1c808716",
+    "name": "SearchVictor",
+    "email": "search.victor@app1.com",
+    "createdAt": "2026-07-03T02:59:15.245Z"
+  },
+  {
+    "id": "67157c73-667e-4377-8615-1d5b696f3427",
+    "name": "SearchGmail",
+    "email": "search.gmail@gmail.com",
+    "createdAt": "2026-07-03T02:59:18.447Z"
+  },
+  {
+    "id": "e1f8e56c-6089-4bb6-ab66-ed06452d27d5",
+    "name": "SearchOutlook",
+    "email": "search.outlook@outlook.com",
+    "createdAt": "2026-07-03T02:59:19.818Z"
   }
 ]
