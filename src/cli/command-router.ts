@@ -16,6 +16,7 @@ import {
   updateUserByEmail
 } from '../modules/users/user.repository';
 import type { User } from '../modules/users/user.types';
+import { validateUsers } from '../modules/validation/validate-users.service';
 import { isCommandName, type ParsedCommand } from './commands';
 
 function printHelp(): void {
@@ -35,6 +36,7 @@ function printHelp(): void {
   console.log('  update-user <email> <newName> <newEmail>  Update a user');
   console.log('  delete-user <email>                       Delete a user from data/users.json');
   console.log('  reset-users                               Delete all users from data/users.json');
+  console.log('  validate-users                            Validate users data integrity');
   console.log('  read-json <filePath>                      Read and print a JSON file');
   console.log('  hash-password <password>                  Generate a SHA-256 hash');
   console.log('  generate-token [bytes]                    Generate a random token');
@@ -43,10 +45,10 @@ function printHelp(): void {
   console.log('  stats-users                               Show users statistics');
   console.log('');
   console.log('Examples:');
+  console.log('  npm run dev -- validate-users');
   console.log('  npm run dev -- count-users');
   console.log('  npm run dev -- list-users');
   console.log('  npm run dev -- filter-users app1.com');
-  console.log('  npm run dev -- sort-users name asc');
 }
 
 function printVersion(): void {
@@ -206,6 +208,25 @@ function handleResetUsers(): void {
   }, null, 2));
 }
 
+function handleValidateUsers(): void {
+  const result = validateUsers();
+
+  if (result.valid) {
+    console.log('Users data is valid');
+    console.log(JSON.stringify({
+      valid: result.valid,
+      totalUsers: result.totalUsers,
+      totalIssues: result.totalIssues
+    }, null, 2));
+    return;
+  }
+
+  console.log('Users data has issues');
+  console.log(JSON.stringify(result, null, 2));
+
+  process.exitCode = 1;
+}
+
 function handleReadJson(args: string[]): void {
   const [filePath] = args;
 
@@ -359,6 +380,11 @@ export function runCli(rawArgs: string[]): void {
 
     if (command.name === 'reset-users') {
       handleResetUsers();
+      return;
+    }
+
+    if (command.name === 'validate-users') {
+      handleValidateUsers();
       return;
     }
 
