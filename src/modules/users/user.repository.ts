@@ -5,6 +5,9 @@ import type { User } from './user.types';
 
 const usersFilePath = path.resolve(process.cwd(), 'data', 'users.json');
 
+export type UserSortField = 'name' | 'email' | 'createdAt' | 'updatedAt';
+export type SortDirection = 'asc' | 'desc';
+
 function ensureUsersFile(): void {
   const dataDir = path.dirname(usersFilePath);
 
@@ -25,6 +28,14 @@ function validateEmail(email: string): void {
   if (!email.includes('@')) {
     throw new Error('Invalid email');
   }
+}
+
+function isUserSortField(value: string): value is UserSortField {
+  return ['name', 'email', 'createdAt', 'updatedAt'].includes(value);
+}
+
+function isSortDirection(value: string): value is SortDirection {
+  return ['asc', 'desc'].includes(value);
 }
 
 export function readUsers(): User[] {
@@ -73,6 +84,27 @@ export function searchUsers(query: string): User[] {
       user.name.toLowerCase().includes(normalizedQuery) ||
       user.email.toLowerCase().includes(normalizedQuery)
     );
+  });
+}
+
+export function sortUsers(field: string, direction: string): User[] {
+  if (!isUserSortField(field)) {
+    throw new Error('Invalid sort field. Use: name, email, createdAt or updatedAt');
+  }
+
+  if (!isSortDirection(direction)) {
+    throw new Error('Invalid sort direction. Use: asc or desc');
+  }
+
+  const users = readUsers();
+
+  return [...users].sort((firstUser, secondUser) => {
+    const firstValue = firstUser[field] ?? '';
+    const secondValue = secondUser[field] ?? '';
+
+    const result = firstValue.localeCompare(secondValue);
+
+    return direction === 'asc' ? result : result * -1;
   });
 }
 

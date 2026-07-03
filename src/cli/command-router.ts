@@ -10,6 +10,7 @@ import {
   readUsers,
   resetUsers,
   searchUsers,
+  sortUsers,
   updateUserByEmail
 } from '../modules/users/user.repository';
 import type { User } from '../modules/users/user.types';
@@ -26,6 +27,7 @@ function printHelp(): void {
   console.log('  list-users                                List users from data/users.json');
   console.log('  find-user <email>                         Find a user by email');
   console.log('  search-users <query>                      Search users by name or email');
+  console.log('  sort-users <field> <direction>            Sort users by field');
   console.log('  update-user <email> <newName> <newEmail>  Update a user');
   console.log('  delete-user <email>                       Delete a user from data/users.json');
   console.log('  reset-users                               Delete all users from data/users.json');
@@ -37,13 +39,11 @@ function printHelp(): void {
   console.log('  stats-users                               Show users statistics');
   console.log('');
   console.log('Examples:');
-  console.log('  npm run dev -- create-user Victor victor@app1.com');
   console.log('  npm run dev -- list-users');
-  console.log('  npm run dev -- find-user victor@app1.com');
   console.log('  npm run dev -- search-users victor');
-  console.log('  npm run dev -- update-user victor@app1.com VictorUpdated victor.updated@app1.com');
-  console.log('  npm run dev -- delete-user victor.updated@app1.com');
-  console.log('  npm run dev -- stats-users');
+  console.log('  npm run dev -- sort-users name asc');
+  console.log('  npm run dev -- sort-users email desc');
+  console.log('  npm run dev -- sort-users createdAt asc');
 }
 
 function printVersion(): void {
@@ -123,6 +123,24 @@ function handleSearchUsers(args: string[]): void {
   }
 
   console.log(`Found ${users.length} user(s)`);
+  printUserTable(users);
+}
+
+function handleSortUsers(args: string[]): void {
+  const [field, direction] = args;
+
+  if (!field || !direction) {
+    throw new Error('Usage: sort-users <field> <direction>');
+  }
+
+  const users = sortUsers(field, direction);
+
+  if (users.length === 0) {
+    console.log('No users found');
+    return;
+  }
+
+  console.log(`Sorted by ${field} ${direction}`);
   printUserTable(users);
 }
 
@@ -284,6 +302,11 @@ export function runCli(rawArgs: string[]): void {
 
     if (command.name === 'search-users') {
       handleSearchUsers(command.args);
+      return;
+    }
+
+    if (command.name === 'sort-users') {
+      handleSortUsers(command.args);
       return;
     }
 
