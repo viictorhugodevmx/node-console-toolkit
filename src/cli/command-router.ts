@@ -2,6 +2,7 @@ import { generateToken, hashPassword } from '../modules/crypto-tools/hash.servic
 import { exportUsers } from '../modules/export/export-users.service';
 import { importUsers } from '../modules/import/import-users.service';
 import { readJsonFile } from '../modules/json-files/json-file.service';
+import { repairUsers } from '../modules/repair/repair-users.service';
 import { getUserStats } from '../modules/stats/user-stats.service';
 import {
   countUsers,
@@ -37,6 +38,7 @@ function printHelp(): void {
   console.log('  delete-user <email>                       Delete a user from data/users.json');
   console.log('  reset-users                               Delete all users from data/users.json');
   console.log('  validate-users                            Validate users data integrity');
+  console.log('  repair-users                              Repair users data when possible');
   console.log('  read-json <filePath>                      Read and print a JSON file');
   console.log('  hash-password <password>                  Generate a SHA-256 hash');
   console.log('  generate-token [bytes]                    Generate a random token');
@@ -46,9 +48,9 @@ function printHelp(): void {
   console.log('');
   console.log('Examples:');
   console.log('  npm run dev -- validate-users');
+  console.log('  npm run dev -- repair-users');
   console.log('  npm run dev -- count-users');
   console.log('  npm run dev -- list-users');
-  console.log('  npm run dev -- filter-users app1.com');
 }
 
 function printVersion(): void {
@@ -227,6 +229,13 @@ function handleValidateUsers(): void {
   process.exitCode = 1;
 }
 
+function handleRepairUsers(): void {
+  const result = repairUsers();
+
+  console.log('Users repair completed');
+  console.log(JSON.stringify(result, null, 2));
+}
+
 function handleReadJson(args: string[]): void {
   const [filePath] = args;
 
@@ -385,6 +394,11 @@ export function runCli(rawArgs: string[]): void {
 
     if (command.name === 'validate-users') {
       handleValidateUsers();
+      return;
+    }
+
+    if (command.name === 'repair-users') {
+      handleRepairUsers();
       return;
     }
 

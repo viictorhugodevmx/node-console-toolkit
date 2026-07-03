@@ -13,6 +13,7 @@ export type CommandName =
   | 'delete-user'
   | 'reset-users'
   | 'validate-users'
+  | 'repair-users'
   | 'read-json'
   | 'hash-password'
   | 'generate-token'
@@ -40,6 +41,7 @@ export const availableCommands: CommandName[] = [
   'delete-user',
   'reset-users',
   'validate-users',
+  'repair-users',
   'read-json',
   'hash-password',
   'generate-token',
