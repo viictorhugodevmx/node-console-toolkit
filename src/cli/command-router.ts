@@ -1,6 +1,7 @@
 import { backupUsers } from '../modules/backup/backup-users.service';
 import { generateToken, hashPassword } from '../modules/crypto-tools/hash.service';
 import { exportUsers } from '../modules/export/export-users.service';
+import { getHealthCheck } from '../modules/health/health-check.service';
 import { importUsers } from '../modules/import/import-users.service';
 import { readJsonFile } from '../modules/json-files/json-file.service';
 import { repairUsers } from '../modules/repair/repair-users.service';
@@ -28,6 +29,7 @@ function printHelp(): void {
   console.log('  help                                      Show available commands');
   console.log('  version                                   Show CLI version');
   console.log('  echo <message>                            Print a message');
+  console.log('  health-check                              Check CLI data health');
   console.log('  create-user <name> <email>                Create a user in data/users.json');
   console.log('  list-users                                List users from data/users.json');
   console.log('  count-users                               Count users from data/users.json');
@@ -49,9 +51,9 @@ function printHelp(): void {
   console.log('  stats-users                               Show users statistics');
   console.log('');
   console.log('Examples:');
+  console.log('  npm run dev -- health-check');
   console.log('  npm run dev -- backup-users');
   console.log('  npm run dev -- validate-users');
-  console.log('  npm run dev -- repair-users');
   console.log('  npm run dev -- count-users');
 }
 
@@ -78,6 +80,16 @@ function printUserTable(users: User[]): void {
   }));
 
   console.table(tableRows);
+}
+
+function handleHealthCheck(): void {
+  const result = getHealthCheck();
+
+  console.log(JSON.stringify(result, null, 2));
+
+  if (result.status === 'error') {
+    process.exitCode = 1;
+  }
 }
 
 function handleCreateUser(args: string[]): void {
@@ -348,6 +360,11 @@ export function runCli(rawArgs: string[]): void {
 
     if (command.name === 'echo') {
       printEcho(command.args);
+      return;
+    }
+
+    if (command.name === 'health-check') {
+      handleHealthCheck();
       return;
     }
 

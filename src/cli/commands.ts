@@ -2,6 +2,7 @@ export type CommandName =
   | 'help'
   | 'version'
   | 'echo'
+  | 'health-check'
   | 'create-user'
   | 'list-users'
   | 'count-users'
@@ -31,6 +32,7 @@ export const availableCommands: CommandName[] = [
   'help',
   'version',
   'echo',
+  'health-check',
   'create-user',
   'list-users',
   'count-users',
